@@ -6,9 +6,6 @@ class Consumer:
     def __init__(self, manager_url, queue_id, balance_after=10, load_balancing_strategy='size'):
         self.__manager_host, self.__manager_port = manager_url
         self.__queue_id = queue_id
-        # access_token, refresh_token = self.login()
-        # self.access_token = access_token
-        # self.refresh_token = refresh_token
         self.__load_balancing_strategy = load_balancing_strategy
         self.__current_node = {}
         self.__current_request = 0
@@ -34,10 +31,8 @@ class Consumer:
 
     def balance_by_size(self):
         statistics = self.get_statistics()
-        current_node = None
+        current_node = statistics['data_nodes'][0]
         for node in statistics['data_nodes']:
-            if not current_node:
-                current_node = node
             for queue in node['queues']:
                 queue_id = queue['id']
                 current_queue = list(filter(lambda x: x['id'] == queue_id, current_node['queues']))[0]
